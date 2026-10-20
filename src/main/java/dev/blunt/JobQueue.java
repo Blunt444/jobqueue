@@ -27,8 +27,13 @@ public class JobQueue {
 
     public static Job poll() {
         try (Jedis j = pool.getResource()) {
-            Job job = decode(j.rpop("jobs"));
-            return job;
+            String encodedString = j.rpop("jobs");
+
+            if(encodedString == null){
+                return null;
+            }
+
+            return decode(encodedString);
         }
     }
 }
