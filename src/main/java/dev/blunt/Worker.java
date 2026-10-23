@@ -1,16 +1,17 @@
 package dev.blunt;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 public class Worker {
 
-    private final Consumer<Job> handler;
+    public final Map<String, Consumer<Job>> handlers = new ConcurrentHashMap<>();
     private volatile boolean running = true;
 
-    Worker(Consumer<Job> handler) {
-        this.handler = handler;
-    }
-
+    // Worker(Consumer<Job> handler) {
+    //     this.handler = handler;
+    // }
     void run() {
         while (running) {
             Job job = JobQueue.poll();
@@ -23,9 +24,17 @@ public class Worker {
                     Thread.currentThread().interrupt();
                     running = false;
                 }
-            }
-            else{
-                handler.accept(job);
+            } else {
+                Consumer<Job> handler = handlers.get(job.type());
+                if (handler != null) {
+                    try {
+                        handler.accept(job);
+                    } catch (Exception e) {
+                        System.out.println("job id: " + job.id() + " failed: " + e.getMessage());
+                    }
+                } else {
+                    System.out.println("no handler for this type " + job.type() + " job id: " + job.id());
+                }
             }
         }
     }
