@@ -1,12 +1,12 @@
 package dev.blunt;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+// import java.util.Map;
+// import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 public class Worker {
 
-    public final Map<String, Consumer<Job>> handlers = new ConcurrentHashMap<>();
+    // public final Map<String, Consumer<Job>> handlers = new ConcurrentHashMap<>();
     private volatile boolean running = true;
 
     // Worker(Consumer<Job> handler) {
@@ -25,7 +25,7 @@ public class Worker {
                     running = false;
                 }
             } else {
-                Consumer<Job> handler = handlers.get(job.type());
+                Consumer<Job> handler = HandlerRegistry.getHandler(job.type());
                 if (handler != null) {
                     try {
                         handler.accept(job);

@@ -20,18 +20,19 @@ public class WorkerTest {
         try (Jedis j = JobQueue.pool.getResource()) {
             j.del("jobs");
         }
+        HandlerRegistry.clear();
     }
 
     @Test
     void testWorker() {
         CountDownLatch done = new CountDownLatch(3);
         Worker w1 = new Worker();
-        w1.handlers.put("email", job -> {
+        HandlerRegistry.register("email", job -> {
             System.out.println(job.id() + " " + job.type() + " " + job.payload());
             done.countDown();
         });
-        w1.handlers.put("report", job -> {
-            System.out.println(job.id() + " " + job.type() + " " + job.payload());
+        HandlerRegistry.register("report", job -> {
+            System.out.println(job.type() + " " + job.payload());
             done.countDown();
         });
 
@@ -67,7 +68,7 @@ public class WorkerTest {
 
         Worker w = new Worker();
 
-        w.handlers.put("email", job -> {
+        HandlerRegistry.register("email", job -> {
             seen.add(job.id());
             done.countDown();
         });
