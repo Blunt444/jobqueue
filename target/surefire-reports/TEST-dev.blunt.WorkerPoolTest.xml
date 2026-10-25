@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.1" name="dev.blunt.WorkerPoolTest" time="0.143" tests="1" errors="0" skipped="0" failures="0">
+  <properties>
+    <property name="java.specification.version" value="21"/>
+    <property name="sun.cpu.isalist" value="amd64"/>
+    <property name="sun.jnu.encoding" value="Cp1252"/>
+    <property name="java.class.path" value="C:\Users\Blunt\Documents\jobqueue\target\test-classes;C:\Users\Blunt\Documents\jobqueue\target\classes;C:\Users\Blunt\.m2\repository\redis\clients\jedis\5.2.0\jedis-5.2.0.jar;C:\Users\Blunt\.m2\repository\org\slf4j\slf4j-api\1.7.36\slf4j-api-1.7.36.jar;C:\Users\Blunt\.m2\repository\org\json\json\20240303\json-20240303.jar;C:\Users\Blunt\.m2\repository\com\google\code\gson\gson\2.11.0\gson-2.11.0.jar;C:\Users\Blunt\.m2\repository\com\google\errorprone\error_prone_annotations\2.27.0\error_prone_annotations-2.27.0.jar;C:\Users\Blunt\.m2\repository\org\apache\commons\commons-pool2\2.12.0\commons-pool2-2.12.0.jar;C:\Users\Blunt\.m2\repository\info\picocli\picocli\4.7.6\picocli-4.7.6.jar;C:\Users\Blunt\.m2\repository\org\slf4j\slf4j-simple\2.0.16\slf4j-simple-2.0.16.jar;C:\Users\Blunt\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.11.0\junit-jupiter-api-5.11.0.jar;C:\Users\Blunt\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\Blunt\.m2\repository\org\junit\platform\junit-platform-commons\1.11.0\junit-platform-commons-1.11.0.jar;C:\Users\Blunt\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\Blunt\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.11.0\junit-jupiter-params-5.11.0.jar;C:\Users\Blunt\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.11.0\junit-jupiter-engine-5.11.0.jar;C:\Users\Blunt\.m2\repository\org\junit\platform\junit-platform-engine\1.11.0\junit-platform-engine-1.11.0.jar;"/>
+    <property name="java.vm.vendor" value="Eclipse Adoptium"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="user.variant" value=""/>
+    <property name="java.vendor.url" value="https://adoptium.net/"/>
+    <property name="user.timezone" value="Asia/Calcutta"/>
+    <property name="os.name" value="Windows 11"/>
+    <property name="java.vm.specification.version" value="21"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="user.country" value="IN"/>
+    <property name="sun.boot.library.path" value="C:\Program Files\Eclipse Adoptium\jdk-21.0.7.6-hotspot\bin"/>
+    <property name="sun.java.command" value="C:\Users\Blunt\AppData\Local\Temp\surefire4809192532135331957\surefirebooter-20261025221209435_3.jar C:\Users\Blunt\AppData\Local\Temp\surefire4809192532135331957 2026-10-25T22-12-09_332-jvmRun1 surefire-20261025221209435_1tmp surefire_0-20261025221209435_2tmp"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="C:\Users\Blunt\Documents\jobqueue\target\test-classes;C:\Users\Blunt\Documents\jobqueue\target\classes;C:\Users\Blunt\.m2\repository\redis\clients\jedis\5.2.0\jedis-5.2.0.jar;C:\Users\Blunt\.m2\repository\org\slf4j\slf4j-api\1.7.36\slf4j-api-1.7.36.jar;C:\Users\Blunt\.m2\repository\org\json\json\20240303\json-20240303.jar;C:\Users\Blunt\.m2\repository\com\google\code\gson\gson\2.11.0\gson-2.11.0.jar;C:\Users\Blunt\.m2\repository\com\google\errorprone\error_prone_annotations\2.27.0\error_prone_annotations-2.27.0.jar;C:\Users\Blunt\.m2\repository\org\apache\commons\commons-pool2\2.12.0\commons-pool2-2.12.0.jar;C:\Users\Blunt\.m2\repository\info\picocli\picocli\4.7.6\picocli-4.7.6.jar;C:\Users\Blunt\.m2\repository\org\slf4j\slf4j-simple\2.0.16\slf4j-simple-2.0.16.jar;C:\Users\Blunt\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.11.0\junit-jupiter-api-5.11.0.jar;C:\Users\Blunt\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\Blunt\.m2\repository\org\junit\platform\junit-platform-commons\1.11.0\junit-platform-commons-1.11.0.jar;C:\Users\Blunt\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\Blunt\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.11.0\junit-jupiter-params-5.11.0.jar;C:\Users\Blunt\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.11.0\junit-jupiter-engine-5.11.0.jar;C:\Users\Blunt\.m2\repository\org\junit\platform\junit-platform-engine\1.11.0\junit-platform-engine-1.11.0.jar;"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="C:\Users\Blunt"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2025-04-15"/>
+    <property name="java.home" value="C:\Program Files\Eclipse Adoptium\jdk-21.0.7.6-hotspot"/>
+    <property name="file.separator" value="\"/>
+    <property name="basedir" value="C:\Users\Blunt\Documents\jobqueue"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="surefire.real.class.path" value="C:\Users\Blunt\AppData\Local\Temp\surefire4809192532135331957\surefirebooter-20261025221209435_3.jar"/>
+    <property name="user.script" value=""/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.runtime.version" value="21.0.7+6-LTS"/>
+    <property name="user.name" value="Blunt"/>
+    <property name="stdout.encoding" value="Cp1252"/>
+    <property name="path.separator" value=";"/>
+    <property name="os.version" value="10.0"/>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="java.vendor.version" value="Temurin-21.0.7+6"/>
+    <property name="localRepository" value="C:\Users\Blunt\.m2\repository"/>
+    <property name="java.vendor.url.bug" value="https://github.com/adoptium/adoptium-support/issues"/>
+    <property name="java.io.tmpdir" value="C:\Users\Blunt\AppData\Local\Temp\"/>
+    <property name="java.version" value="21.0.7"/>
+    <property name="user.dir" value="C:\Users\Blunt\Documents\jobqueue"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="sun.os.patch.level" value=""/>
+    <property name="native.encoding" value="Cp1252"/>
+    <property name="java.library.path" value="C:\Program Files\Eclipse Adoptium\jdk-21.0.7.6-hotspot\bin;C:\windows\Sun\Java\bin;C:\windows\system32;C:\windows;C:\Users\Blunt\AppData\Local\Microsoft\WindowsApps\Microsoft.PowerShell_8wekyb3d8bbwe;C:\Program Files\Meta Horizon\Support\oculus-runtime;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v13.1\bin\x64;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v13.1\bin;C:\Program Files\Eclipse Adoptium\jdk-21.0.7.6-hotspot\bin;C:\Program Files\Eclipse Adoptium\jdk-17.0.15.6-hotspot\bin;C:\windows\system32;C:\windows;C:\windows\System32\Wbem;C:\windows\System32\WindowsPowerShell\v1.0\;C:\windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps;C:\Program Files\HP\OMEN-Broadcast\Common;C:\Program Files\Git\cmd;C:\Program Files\Microsoft VS Code\bin;C:\Program Files\NVIDIA Corporation\NVIDIA App\NvDLISR;C:\Program Files\nodejs\;C:\ProgramData\chocolatey\bin;C:\Program Files\dotnet\;C:\Program Files\NVIDIA Corporation\Nsight Compute 2025.4.1\;C:\Users\vikra\AppData\Local\Muse Hub\lib;C:\Program Files\Go\bin;C:\Users\Blunt\AppData\Local\Muse Hub\lib;C:\Program Files\Cloudflare\Cloudflare WARP\;C:\Program Files\Docker\Docker\resources\bin;C:\Tools\apache-maven-3.10.0\bin;C:\Program Files\Meta Horizon\Support\oculus-runtime;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v13.1\bin\x64;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v13.1\bin;C:\Program Files\Eclipse Adoptium\jdk-21.0.7.6-hotspot\bin;C:\Program Files\Eclipse Adoptium\jdk-17.0.15.6-hotspot\bin;C:\windows\system32;C:\windows;C:\windows\System32\Wbem;C:\windows\System32\WindowsPowerShell\v1.0\;C:\windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps;C:\Program Files\HP\OMEN-Broadcast\Common;C:\Program Files\Git\cmd;C:\Program Files\Microsoft VS Code\bin;C:\Program Files\NVIDIA Corporation\NVIDIA App\NvDLISR;C:\Program Files\nodejs\;C:\ProgramData\chocolatey\bin;C:\Program Files\dotnet\;C:\Program Files\NVIDIA Corporation\Nsight Compute 2025.4.1\;C:\Users\vikra\AppData\Local\Muse Hub\lib;C:\Program Files\Go\bin;C:\Users\Blunt\AppData\Local\Muse Hub\lib;C:\Program Files\Cloudflare\Cloudflare WARP\;C:\Program Files\Docker\Docker\resources\bin;C:\Users\Blunt\AppData\Local\Microsoft\WindowsApps;C:\Users\Blunt\AppData\Local\Muse Hub\lib;C:\Tools\apache-maven-3.10.0\bin;c:\Users\Blunt\.vscode\extensions\vscjava.vscode-java-debug-0.60.0\bundled\scripts\noConfigScripts;."/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="stderr.encoding" value="Cp1252"/>
+    <property name="java.vendor" value="Eclipse Adoptium"/>
+    <property name="java.vm.version" value="21.0.7+6-LTS"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="java.class.version" value="65.0"/>
+  </properties>
+  <testcase name="testWorkerPool" classname="dev.blunt.WorkerPoolTest" time="0.142">
+    <system-out><![CDATA[0 email This is a email for 0
+1 email This is a email for 1
+2 email This is a email for 2
+4 email This is a email for 4
+3 email This is a email for 3
+5 email This is a email for 5
+6 email This is a email for 6
+7 email This is a email for 7
+8 email This is a email for 8
+10 email This is a email for 10
+9 email This is a email for 9
+13 email This is a email for 13
+11 email This is a email for 11
+12 email This is a email for 12
+15 email This is a email for 15
+14 email This is a email for 14
+16 email This is a email for 16
+18 email This is a email for 18
+17 email This is a email for 17
+19 email This is a email for 19
+21 email This is a email for 21
+20 email This is a email for 20
+22 email This is a email for 22
+24 email This is a email for 24
+23 email This is a email for 23
+25 email This is a email for 25
+26 email This is a email for 26
+27 email This is a email for 27
+28 email This is a email for 28
+29 email This is a email for 29
+30 email This is a email for 30
+32 email This is a email for 32
+31 email This is a email for 31
+33 email This is a email for 33
+35 email This is a email for 35
+34 email This is a email for 34
+36 email This is a email for 36
+37 email This is a email for 37
+38 email This is a email for 38
+39 email This is a email for 39
+41 email This is a email for 41
+40 email This is a email for 40
+44 email This is a email for 44
+43 email This is a email for 43
+42 email This is a email for 42
+46 email This is a email for 46
+45 email This is a email for 45
+47 email This is a email for 47
+49 email This is a email for 49
+48 email This is a email for 48
+50 email This is a email for 50
+52 email This is a email for 52
+51 email This is a email for 51
+54 email This is a email for 54
+53 email This is a email for 53
+55 email This is a email for 55
+57 email This is a email for 57
+56 email This is a email for 56
+58 email This is a email for 58
+60 email This is a email for 60
+59 email This is a email for 59
+61 email This is a email for 61
+62 email This is a email for 62
+63 email This is a email for 63
+65 email This is a email for 65
+64 email This is a email for 64
+66 email This is a email for 66
+68 email This is a email for 68
+67 email This is a email for 67
+69 email This is a email for 69
+71 email This is a email for 71
+70 email This is a email for 70
+72 email This is a email for 72
+73 email This is a email for 73
+74 email This is a email for 74
+76 email This is a email for 76
+75 email This is a email for 75
+77 email This is a email for 77
+79 email This is a email for 79
+78 email This is a email for 78
+80 email This is a email for 80
+81 email This is a email for 81
+82 email This is a email for 82
+83 email This is a email for 83
+84 email This is a email for 84
+85 email This is a email for 85
+86 email This is a email for 86
+88 email This is a email for 88
+87 email This is a email for 87
+89 email This is a email for 89
+90 email This is a email for 90
+91 email This is a email for 91
+92 email This is a email for 92
+93 email This is a email for 93
+94 email This is a email for 94
+96 email This is a email for 96
+95 email This is a email for 95
+97 email This is a email for 97
+98 email This is a email for 98
+99 email This is a email for 99
+]]></system-out>
+  </testcase>
+</testsuite>

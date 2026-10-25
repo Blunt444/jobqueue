@@ -54,7 +54,5 @@ public class WorkerPool {
             executor.shutdownNow();
             Thread.currentThread().interrupt();
         }
-
-        executor.shutdown();
     }
 }
