@@ -14,7 +14,7 @@ public class Worker {
     // }
     void run() {
         while (running) {
-            Job job = JobQueue.poll();
+            Job job = JobQueue.claim(30_000);
 
             if (job == null) {
                 try {
