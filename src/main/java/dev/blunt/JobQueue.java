@@ -11,11 +11,12 @@ public class JobQueue {
 
     public static final JedisPool pool = new JedisPool("localhost", 6379);
 
-    private static final String readyKey = "jobs";
-    private static final String activeKey = "jobs:active";
+    public static final String readyKey = "jobs";
+    public static final String activeKey = "jobs:active";
 
     private static final String claimScript = loadScript("lua/claim.lua");
     private static final String requeueScript = loadScript("lua/requeue.lua");
+    private static final String ackScript = loadScript("lua/ack.lua");
 
     private static String loadScript(String resource) {
         try (InputStream in = JobQueue.class.getClassLoader().getResourceAsStream(resource)) {
@@ -78,17 +79,31 @@ public class JobQueue {
         }
     }
 
-    public static long requeueExpired(){
+    public static long requeueExpired() {
         int batchSize = 100;
-        try(Jedis j = pool.getResource()) {
-            
+        try (Jedis j = pool.getResource()) {
+
             Object result = j.eval(
-                requeueScript,
-                java.util.List.of(readyKey,activeKey),
-                java.util.List.of(String.valueOf(batchSize))
+                    requeueScript,
+                    java.util.List.of(readyKey, activeKey),
+                    java.util.List.of(String.valueOf(batchSize))
             );
 
             return ((Number) result).longValue();
+        }
+    }
+
+    public static boolean ack(Job job) {
+        try (Jedis j = pool.getResource()) {
+            String jobEncode = encode(job);
+
+            Object result = j.eval(
+                    ackScript,
+                    java.util.List.of(activeKey),
+                    java.util.List.of(jobEncode)
+            );
+
+            return ((Number) result).longValue() == 1;
         }
     }
 }

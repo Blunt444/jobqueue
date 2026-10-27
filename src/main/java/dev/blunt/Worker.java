@@ -29,6 +29,10 @@ public class Worker {
                 if (handler != null) {
                     try {
                         handler.accept(job);
+
+                        if (!JobQueue.ack(job)) {
+                            System.out.println("Couldn't ack the job " + job.id());
+                        }
                     } catch (Exception e) {
                         System.out.println("job id: " + job.id() + " failed: " + e.getMessage());
                     }
