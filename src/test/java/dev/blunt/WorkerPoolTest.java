@@ -31,7 +31,7 @@ public class WorkerPoolTest {
         WorkerPool pool = new WorkerPool(4);
 
         HandlerRegistry.register("email", job -> {
-            System.out.println(job.id() + " " + job.type() + " " + job.payload());
+            // System.out.println(job.id() + " " + job.type() + " " + job.payload());
             
             seen.add(job.id());
             calls.incrementAndGet();

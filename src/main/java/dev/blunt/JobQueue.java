@@ -13,6 +13,9 @@ public class JobQueue {
 
     public static final String readyKey = "jobs";
     public static final String activeKey = "jobs:active";
+    public static final String retryKey = "jobs:retry";
+    public static final String deadKey = "jobs:dead";
+    public static final String attemptsKey = "jobs:attempts";
 
     private static final String claimScript = loadScript("lua/claim.lua");
     private static final String requeueScript = loadScript("lua/requeue.lua");
@@ -32,13 +35,13 @@ public class JobQueue {
     }
 
     public static String encode(Job job) {
-        String encodedString = job.id() + "\t" + job.type() + "\t" + job.payload();
+        String encodedString = job.id() + "\t" + job.type() + "\t" + job.maxAttempts() + "\t" + job.payload();
         return encodedString;
     }
 
     public static Job decode(String encodedString) {
-        String[] decodedString = encodedString.split("\t", 3);
-        Job job = new Job(decodedString[0], decodedString[1], decodedString[2]);
+        String[] decodedString = encodedString.split("\t", 4);
+        Job job = new Job(decodedString[0], decodedString[1], decodedString[3], 0, Integer.parseInt(decodedString[2]));
         return job;
     }
 
@@ -66,7 +69,7 @@ public class JobQueue {
 
             Object result = j.eval(
                     claimScript,
-                    java.util.List.of(readyKey, activeKey),
+                    java.util.List.of(readyKey, activeKey, attemptsKey),
                     java.util.List.of(String.valueOf(leaseMs))
             );
 
@@ -81,12 +84,14 @@ public class JobQueue {
 
     public static long requeueExpired() {
         int batchSize = 100;
+        int cap = 50000;
+        int base = 1000;
         try (Jedis j = pool.getResource()) {
 
             Object result = j.eval(
                     requeueScript,
-                    java.util.List.of(readyKey, activeKey),
-                    java.util.List.of(String.valueOf(batchSize))
+                    java.util.List.of(retryKey, activeKey, attemptsKey, deadKey),
+                    java.util.List.of(String.valueOf(batchSize), String.valueOf(cap), String.valueOf(base))
             );
 
             return ((Number) result).longValue();
