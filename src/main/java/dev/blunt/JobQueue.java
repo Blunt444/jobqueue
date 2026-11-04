@@ -20,6 +20,7 @@ public class JobQueue {
     private static final String claimScript = loadScript("lua/claim.lua");
     private static final String requeueScript = loadScript("lua/requeue.lua");
     private static final String ackScript = loadScript("lua/ack.lua");
+    private static final String retryScript = loadScript("lua/retry.lua");
 
     private static String loadScript(String resource) {
         try (InputStream in = JobQueue.class.getClassLoader().getResourceAsStream(resource)) {
@@ -92,6 +93,19 @@ public class JobQueue {
                     requeueScript,
                     java.util.List.of(retryKey, activeKey, attemptsKey, deadKey),
                     java.util.List.of(String.valueOf(batchSize), String.valueOf(cap), String.valueOf(base))
+            );
+
+            return ((Number) result).longValue();
+        }
+    }
+
+    public static long retryJobs() {
+        int batchSize = 100;
+        try (Jedis j = pool.getResource()) {
+            Object result = j.eval(
+                    retryScript,
+                    java.util.List.of(readyKey, retryKey),
+                    java.util.List.of(String.valueOf(batchSize))
             );
 
             return ((Number) result).longValue();

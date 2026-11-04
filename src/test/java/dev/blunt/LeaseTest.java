@@ -16,6 +16,9 @@ public class LeaseTest {
 
             j.del(JobQueue.readyKey);
             j.del(JobQueue.activeKey);
+            j.del(JobQueue.attemptsKey);
+            j.del(JobQueue.retryKey);
+            j.del(JobQueue.deadKey);
 
             HandlerRegistry.clear();
         }
@@ -24,6 +27,24 @@ public class LeaseTest {
     private long readyCount() {
         try (Jedis j = JobQueue.pool.getResource()) {
             return j.llen(JobQueue.readyKey);
+        }
+    }
+
+    private long attemptsCount() {
+        try (Jedis j = JobQueue.pool.getResource()) {
+            return j.zcard(JobQueue.attemptsKey);
+        }
+    }
+
+    private long retryCount() {
+        try (Jedis j = JobQueue.pool.getResource()) {
+            return j.zcard(JobQueue.retryKey);
+        }
+    }
+
+    private long deadCount() {
+        try (Jedis j = JobQueue.pool.getResource()) {
+            return j.llen(JobQueue.deadKey);
         }
     }
 
@@ -54,8 +75,21 @@ public class LeaseTest {
         long count = JobQueue.requeueExpired();
 
         assertEquals(1, count);
-        assertEquals(1, readyCount());
+        assertEquals(1, retryCount());
         assertEquals(0, activeCount());
+        assertEquals(0, readyCount());
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        count = JobQueue.retryJobs();
+
+        assertEquals(1, count);
+        assertEquals(0, retryCount());
+        assertEquals(1, readyCount());
 
         Job workerB = JobQueue.claim(3000);
 

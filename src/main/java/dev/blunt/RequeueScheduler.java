@@ -24,7 +24,7 @@ public class RequeueScheduler {
         }, 0, 1, TimeUnit.SECONDS);
     }
 
-    public static void stop(){
+    public static void stop() {
         scheduler.shutdown();
     }
 }
