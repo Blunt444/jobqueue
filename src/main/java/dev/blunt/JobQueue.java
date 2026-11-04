@@ -13,6 +13,7 @@ public class JobQueue {
     public static final JedisPool pool = new JedisPool("localhost", 6379);
 
     public static final String readyKey = "jobs";
+    public static final String delayKey = "jobs:delayed";
     public static final String activeKey = "jobs:active";
     public static final String retryKey = "jobs:retry";
     public static final String deadKey = "jobs:dead";
@@ -23,6 +24,7 @@ public class JobQueue {
     private static final String ackScript = loadScript("lua/ack.lua");
     private static final String retryScript = loadScript("lua/retry.lua");
     private static final String renewLeaseScript = loadScript("lua/renewLease.lua");
+    private static final String promoteDelayedScript = loadScript("lua/promoteDelayed.lua");
 
     private static String loadScript(String resource) {
         try (InputStream in = JobQueue.class.getClassLoader().getResourceAsStream(resource)) {
@@ -50,7 +52,14 @@ public class JobQueue {
 
     public static boolean push(Job job) {
         try (Jedis j = pool.getResource()) {
-            j.lpush("jobs", encode(job));
+            j.lpush(readyKey, encode(job));
+            return true;
+        }
+    }
+
+    public static boolean push(Job job, long ms) {
+        try (Jedis j = pool.getResource()) {
+            j.zadd(delayKey, ms, encode(job));
             return true;
         }
     }
@@ -142,6 +151,19 @@ public class JobQueue {
             );
 
             return ((Number) result).longValue() == 1;
+        }
+    }
+
+    public static long promoteDelayedJobs() {
+        int batchSize = 100;
+        try (Jedis j = pool.getResource()) {
+            Object result = j.eval(
+                    promoteDelayedScript,
+                    java.util.List.of(readyKey, delayKey),
+                    java.util.List.of(String.valueOf(batchSize))
+            );
+
+            return ((Number) result).longValue();
         }
     }
 }
