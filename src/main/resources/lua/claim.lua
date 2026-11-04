@@ -24,4 +24,4 @@ else
 end
 
 redis.call("ZADD", activeKey, ms + leasems, job)
-return {job, score}
+return {job, tostring(score)}

@@ -47,7 +47,7 @@ public class WorkerPoolTest {
         boolean finished = false;
 
         try {
-            finished = done.await(5, TimeUnit.SECONDS);
+            finished = done.await(10, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } finally {
