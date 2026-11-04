@@ -102,4 +102,31 @@ public class LeaseTest {
 
     }
 
+    @Test
+    void testJobDead() {
+        Job job = new Job("1", "email", "123", 0, 1);
+        JobQueue.push(job);
+
+        Job workerA = JobQueue.claim(300);
+
+        assertNotNull(workerA);
+        assertEquals(0, readyCount());
+        assertEquals(1, activeCount());
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        long count = JobQueue.requeueExpired();
+
+        assertEquals(1, count);
+        assertEquals(0, activeCount());
+        assertEquals(0, readyCount());
+        assertEquals(0, retryCount());
+        assertEquals(1, deadCount());
+
+    }
+
 }

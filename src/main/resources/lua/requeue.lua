@@ -20,11 +20,24 @@ local requeued = 0
 
 for _, job in ipairs(expiredJobs) do
     if redis.call("ZREM", activeKey, job) == 1 then
+        local fields = {}
+        for field in string.gmatch(job, "[^\t]+") do
+            table.insert(fields, field)
+        end
+
+        local maxAttempts = tonumber(fields[3])
         local attempts = tonumber(redis.call("ZSCORE", attemptsKey, job))
         if attempts then
-            local delay = math.min(cap, base * math.pow(2, attempts))
-            local retryAt = ms + delay
-            redis.call("ZADD", retryKey, retryAt, job)
+            if attempts >= maxAttempts then
+                redis.call("LPUSH", deadKey, job)
+                redis.call("ZREM", attemptsKey, job)
+            else
+                local delay = math.min(cap, base * math.pow(2, attempts - 1))
+                local retryAt = ms + delay
+                redis.call("ZADD", retryKey, retryAt, job)
+            end
+        else
+            redis.call("LPUSH", deadKey, job)
         end
         requeued = requeued + 1
     end
