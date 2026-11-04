@@ -15,11 +15,13 @@ end
 local score = redis.call("ZSCORE", attemptsKey, job)
 
 if not score then
-    redis.call("ZADD", attemptsKey, 1, job)
+    score = 1
+    redis.call("ZADD", attemptsKey, score, job)
 
 else
-    redis.call("ZADD", attemptsKey, tonumber(score) + 1, job)
+    score = tonumber(score) + 1
+    redis.call("ZADD", attemptsKey, score, job)
 end
 
 redis.call("ZADD", activeKey, ms + leasems, job)
-return job
+return {job, score}

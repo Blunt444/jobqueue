@@ -17,7 +17,9 @@ public class Worker {
     // }
     void run() {
         while (running) {
-            Job job = JobQueue.claim(30_000);
+            ClaimedJob claimedJob = JobQueue.claim(30_000);
+            Job job = claimedJob.job();
+            long fencingToken = claimedJob.fencingToken();
 
             if (job == null) {
                 try {
@@ -46,7 +48,7 @@ public class Worker {
 
                         handler.accept(job);
 
-                        if (!JobQueue.ack(job)) {
+                        if (!JobQueue.ack(job, fencingToken)) {
                             System.out.println("Couldn't ack the job " + job.id());
                         }
                     } catch (Exception e) {

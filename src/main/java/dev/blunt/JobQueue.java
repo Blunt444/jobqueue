@@ -3,6 +3,7 @@ package dev.blunt;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -66,7 +67,7 @@ public class JobQueue {
         }
     }
 
-    public static Job claim(long leaseMs) {
+    public static ClaimedJob claim(long leaseMs) {
         try (Jedis j = pool.getResource()) {
 
             Object result = j.eval(
@@ -79,7 +80,12 @@ public class JobQueue {
                 return null;
             }
 
-            return decode((String) result);
+            List<?> values = (List<?>) result;
+
+            String encodedJob = (String) values.get(0);
+            long fencingToken = Long.parseLong((String) values.get(1));
+
+            return new ClaimedJob(decode(encodedJob), fencingToken);
 
         }
     }
@@ -113,14 +119,14 @@ public class JobQueue {
         }
     }
 
-    public static boolean ack(Job job) {
+    public static boolean ack(Job job, long fencingToken) {
         try (Jedis j = pool.getResource()) {
             String jobEncode = encode(job);
 
             Object result = j.eval(
                     ackScript,
-                    java.util.List.of(activeKey),
-                    java.util.List.of(jobEncode)
+                    java.util.List.of(activeKey, attemptsKey),
+                    java.util.List.of(jobEncode, String.valueOf(fencingToken))
             );
 
             return ((Number) result).longValue() == 1;

@@ -60,7 +60,7 @@ public class LeaseTest {
         Job job = new Job("1", "email", "123");
         JobQueue.push(job);
 
-        Job workerA = JobQueue.claim(300);
+        ClaimedJob workerA = JobQueue.claim(300);
 
         assertNotNull(workerA);
         assertEquals(0, readyCount());
@@ -91,11 +91,11 @@ public class LeaseTest {
         assertEquals(0, retryCount());
         assertEquals(1, readyCount());
 
-        Job workerB = JobQueue.claim(3000);
+        ClaimedJob workerB = JobQueue.claim(3000);
 
         assertNotNull(workerB);
-        assertEquals(workerA.id(), workerB.id());
-        assertTrue(JobQueue.ack(workerB));
+        assertEquals(workerA.job().id(), workerB.job().id());
+        assertTrue(JobQueue.ack(workerB.job(), workerB.fencingToken()));
 
         assertEquals(0, readyCount());
         assertEquals(0, activeCount());
@@ -107,7 +107,7 @@ public class LeaseTest {
         Job job = new Job("1", "email", "123", 0, 1);
         JobQueue.push(job);
 
-        Job workerA = JobQueue.claim(300);
+        ClaimedJob workerA = JobQueue.claim(300);
 
         assertNotNull(workerA);
         assertEquals(0, readyCount());

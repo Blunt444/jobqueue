@@ -39,7 +39,7 @@ public class HeartBeatTest {
         Job job = new Job("1", "email", "123");
         JobQueue.push(job);
 
-        Job workerA = JobQueue.claim(15_000);
+        ClaimedJob workerA = JobQueue.claim(15_000);
 
         assertNotNull(workerA);
         assertEquals(0, readyCount());
@@ -65,7 +65,7 @@ public class HeartBeatTest {
             assertEquals(0, readyCount());
             assertEquals(1, activeCount());
 
-            boolean result = JobQueue.ack(job);
+            boolean result = JobQueue.ack(job, workerA.fencingToken());
 
             assertTrue(result);
         }
