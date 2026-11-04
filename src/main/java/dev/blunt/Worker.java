@@ -2,6 +2,9 @@ package dev.blunt;
 
 // import java.util.Map;
 // import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class Worker {
@@ -27,7 +30,20 @@ public class Worker {
             } else {
                 Consumer<Job> handler = HandlerRegistry.getHandler(job.type());
                 if (handler != null) {
-                    try {
+                    try (ScheduledExecutorService heartbeat = Executors.newSingleThreadScheduledExecutor()) {
+
+                        try {
+                            heartbeat.scheduleAtFixedRate(() -> {
+                                boolean renewed = JobQueue.renewLease(30_000, job);
+
+                                if (!renewed) {
+                                    System.out.println("Couldn't renew lease for job id " + job.id());
+                                }
+                            }, 10, 10, TimeUnit.SECONDS);
+                        } catch (Exception e) {
+                            System.out.println("Heartbeat failed: " + e.getMessage());
+                        }
+
                         handler.accept(job);
 
                         if (!JobQueue.ack(job)) {
@@ -35,6 +51,8 @@ public class Worker {
                         }
                     } catch (Exception e) {
                         System.out.println("job id: " + job.id() + " failed: " + e.getMessage());
+                    } finally {
+
                     }
                 } else {
                     System.out.println("no handler for this type " + job.type() + " job id: " + job.id());

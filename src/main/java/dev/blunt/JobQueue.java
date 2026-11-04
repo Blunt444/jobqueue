@@ -21,6 +21,7 @@ public class JobQueue {
     private static final String requeueScript = loadScript("lua/requeue.lua");
     private static final String ackScript = loadScript("lua/ack.lua");
     private static final String retryScript = loadScript("lua/retry.lua");
+    private static final String renewLeaseScript = loadScript("lua/renewLease.lua");
 
     private static String loadScript(String resource) {
         try (InputStream in = JobQueue.class.getClassLoader().getResourceAsStream(resource)) {
@@ -120,6 +121,18 @@ public class JobQueue {
                     ackScript,
                     java.util.List.of(activeKey),
                     java.util.List.of(jobEncode)
+            );
+
+            return ((Number) result).longValue() == 1;
+        }
+    }
+
+    public static boolean renewLease(long ms, Job job) {
+        try (Jedis j = pool.getResource()) {
+            Object result = j.eval(
+                    renewLeaseScript,
+                    java.util.List.of(activeKey),
+                    java.util.List.of(String.valueOf(ms), encode(job))
             );
 
             return ((Number) result).longValue() == 1;
