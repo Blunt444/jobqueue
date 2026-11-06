@@ -1,6 +1,8 @@
 package dev.blunt;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -147,12 +149,50 @@ public class CronExpression {
         result.hours = parseField(splits[1], 0, 23);
         result.daysOfMonth = parseField(splits[2], 1, 31);
         result.months = parseField(splits[3], 1, 12);
-        result.daysOfWeek = parseField(splits[4], 0, 7);
+        result.daysOfWeek = normalizeDaysOfWeek(parseField(splits[4], 0, 7));
 
         return result;
     }
 
-    public static boolean matches(LocalDateTime dateTime){
+    private static Set<Integer> normalizeDaysOfWeek(Set<Integer> daysOfWeek) {
+        Set<Integer> result = new TreeSet<>();
+        for (int d : daysOfWeek) {
+            result.add(d % 7);
+        }
+
+        return result;
+    }
+
+    public boolean matches(LocalDateTime dateTime) {
+
+        LocalDate date = dateTime.toLocalDate();
+        LocalTime time = dateTime.toLocalTime();
+
+        int min = time.getMinute();
+        int hr = time.getHour();
+        int dayOfMonth = date.getDayOfMonth();
+        int month = date.getMonthValue();
+        int dayOfWeek = date.getDayOfWeek().getValue() % 7;
+
+        if (!minutes.contains(min)) {
+            return false;
+        }
+
+        if (!hours.contains(hr)) {
+            return false;
+        }
+
+        if (!daysOfMonth.contains(dayOfMonth)) {
+            return false;
+        }
+
+        if (!months.contains(month)) {
+            return false;
+        }
+
+        if (!daysOfWeek.contains(dayOfWeek)) {
+            return false;
+        }
 
         return true;
     }
