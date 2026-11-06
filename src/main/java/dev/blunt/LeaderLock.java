@@ -10,9 +10,10 @@ import redis.clients.jedis.Jedis;
 
 public class LeaderLock {
 
-    private static String leaderKey = "scheduler:leader";
+    public static final String leaderKey = "scheduler:leader";
     private final String ownerId;
     private final String renewScript = loadScript("lua/renewLeader.lua");
+    private final String releaseScript = loadScript("lua/releaseLeader.lua");
 
     public LeaderLock() {
         this.ownerId = UUID.randomUUID().toString();
@@ -50,6 +51,18 @@ public class LeaderLock {
                     renewScript,
                     List.of(leaderKey),
                     List.of(ownerId, String.valueOf(10000))
+            );
+
+            return ((Number) result).longValue() == 1;
+        }
+    }
+
+    public boolean release() {
+        try (Jedis j = JobQueue.pool.getResource()) {
+            Object result = j.eval(
+                    releaseScript,
+                    List.of(leaderKey),
+                    List.of(ownerId)
             );
 
             return ((Number) result).longValue() == 1;
