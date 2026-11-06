@@ -13,6 +13,8 @@ public class CronExpression {
     private Set<Integer> daysOfMonth;
     private Set<Integer> months;
     private Set<Integer> daysOfWeek;
+    private boolean isStrictDaysMonth = false;
+    private boolean isStrictDaysWeek = false;
 
     public static Set<Integer> parseField(String field, int min, int max) {
         Set<Integer> result = new TreeSet<>();
@@ -137,7 +139,7 @@ public class CronExpression {
     }
 
     public static CronExpression parse(String field) {
-        String[] splits = field.split("\\s+");
+        String[] splits = field.trim().split("\\s+");
 
         if (splits.length != 5) {
             throw new IllegalArgumentException("Invalid Expression");
@@ -150,6 +152,9 @@ public class CronExpression {
         result.daysOfMonth = parseField(splits[2], 1, 31);
         result.months = parseField(splits[3], 1, 12);
         result.daysOfWeek = normalizeDaysOfWeek(parseField(splits[4], 0, 7));
+
+        result.isStrictDaysMonth = !splits[2].equals("*");
+        result.isStrictDaysWeek = !splits[4].equals("*");
 
         return result;
     }
@@ -182,16 +187,23 @@ public class CronExpression {
             return false;
         }
 
-        if (!daysOfMonth.contains(dayOfMonth)) {
-            return false;
-        }
-
         if (!months.contains(month)) {
             return false;
         }
 
-        if (!daysOfWeek.contains(dayOfWeek)) {
-            return false;
+        boolean monthDayMatches = daysOfMonth.contains(dayOfMonth);
+        boolean weekDayMatches = daysOfWeek.contains(dayOfWeek);
+
+        if (isStrictDaysMonth && isStrictDaysWeek) {
+            return monthDayMatches || weekDayMatches;
+        }
+
+        if (isStrictDaysMonth) {
+            return monthDayMatches;
+        }
+
+        if (isStrictDaysWeek) {
+            return weekDayMatches;
         }
 
         return true;
