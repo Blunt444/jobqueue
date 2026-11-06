@@ -1,9 +1,16 @@
 package dev.blunt;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.TreeSet;
 
 public class CronExpression {
+
+    private Set<Integer> minutes;
+    private Set<Integer> hours;
+    private Set<Integer> daysOfMonth;
+    private Set<Integer> months;
+    private Set<Integer> daysOfWeek;
 
     public static Set<Integer> parseField(String field, int min, int max) {
         Set<Integer> result = new TreeSet<>();
@@ -35,24 +42,21 @@ public class CronExpression {
                         for (int i = min; i <= max; i += step) {
                             result.add(i);
                         }
-                    }
-                    else if(range.length == 1){
-                        try{
+                    } else if (range.length == 1) {
+                        try {
                             int startRange = Integer.parseInt(range[0]);
 
-                            if(startRange < min || startRange > max){
+                            if (startRange < min || startRange > max) {
                                 throw new IllegalArgumentException("Not a valid range value");
                             }
 
-                            for(int i = startRange; i <= max; i+= step){
+                            for (int i = startRange; i <= max; i += step) {
                                 result.add(i);
                             }
-                        }
-                        catch(NumberFormatException e){
+                        } catch (NumberFormatException e) {
                             throw new IllegalArgumentException("Invalid range");
                         }
-                    } 
-                    else if (range.length > 2) {
+                    } else if (range.length > 2) {
                         throw new IllegalArgumentException("Multiple ranges");
                     } else if (range.length < 1) {
                         throw new IllegalArgumentException("Range is incomplete");
@@ -128,5 +132,70 @@ public class CronExpression {
         }
 
         return result;
+    }
+
+    public static CronExpression parse(String field) {
+        String[] splits = field.split("\\s+");
+
+        if (splits.length != 5) {
+            throw new IllegalArgumentException("Invalid Expression");
+        }
+
+        CronExpression result = new CronExpression();
+
+        result.minutes = parseField(splits[0], 0, 59);
+        result.hours = parseField(splits[1], 0, 23);
+        result.daysOfMonth = parseField(splits[2], 1, 31);
+        result.months = parseField(splits[3], 1, 12);
+        result.daysOfWeek = parseField(splits[4], 0, 7);
+
+        return result;
+    }
+
+    public static boolean matches(LocalDateTime dateTime){
+
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+
+        result.append("[");
+        for (int x : minutes) {
+            result.append(x);
+            result.append(" ");
+        }
+        result.append("]");
+        result.append(" ");
+
+        result.append("[");
+        for (int x : hours) {
+            result.append(x + " ");
+        }
+        result.append("]");
+        result.append(" ");
+
+        result.append("[");
+        for (int x : daysOfMonth) {
+            result.append(x + " ");
+        }
+        result.append("]");
+        result.append(" ");
+
+        result.append("[");
+        for (int x : months) {
+            result.append(x + " ");
+        }
+        result.append("]");
+        result.append(" ");
+
+        result.append("[");
+        for (int x : daysOfWeek) {
+            result.append(x + " ");
+        }
+        result.append("]");
+
+        return result.toString();
     }
 }
