@@ -8,11 +8,13 @@ public class Schedule {
     private final String id;
     private final CronExpression cronExpression;
     private final Job job;
+    private final LocalDateTime createdAt;
 
     public Schedule(CronExpression cronExpression, Job job) {
         this.id = UUID.randomUUID().toString();
         this.cronExpression = cronExpression;
         this.job = job;
+        this.createdAt = LocalDateTime.now();
     }
 
     public boolean shouldRun(LocalDateTime dateTime) {
@@ -29,5 +31,9 @@ public class Schedule {
 
     public Job getJob() {
         return job;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 }

@@ -68,4 +68,16 @@ public class LeaderLock {
             return ((Number) result).longValue() == 1;
         }
     }
+
+    public boolean isLeader() {
+        try (Jedis j = JobQueue.pool.getResource()) {
+            String currentOwner = j.get(leaderKey);
+
+            return ownerId.equals(currentOwner);
+        }
+    }
+
+    public String getOwnerId(){
+        return ownerId;
+    }
 }
